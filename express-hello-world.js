@@ -15,12 +15,12 @@
 //joe sheps way
 'use strict';
 
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
-//routes modules
-const animalRoutes = require('./routes/animals')
+// routes modules
+const routes = require('./routes/');
 
 // middleware
 const requestTime = (req, res, next) => {
@@ -28,16 +28,20 @@ const requestTime = (req, res, next) => {
   next();
 }
 
-app.use(express.static(__dirname + '/public'));
+const expressStatic = (req, res, next) => {
+    res.expressedStatic = __dirname + '/public'
+    next()
+}
 
-app.use(requestTime)
+app.use(expressStatic);
 
-app.use(animalRoutes)
+app.use(requestTime);
+
+app.use(routes);
 
 app.use( (req, res) => {
   res.send("Where do you think you're going? We only have monkeys and chickens here.")
 });
-
 
 const port = process.env.PORT || 3000
 
